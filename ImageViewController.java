@@ -1,14 +1,20 @@
 package application;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.imageio.ImageIO;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -26,8 +32,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -73,16 +79,8 @@ public class ImageViewController implements Initializable {
 	
 	public void initialize(URL url, ResourceBundle resource) {
 		initScrollPane();
-		checkBoxSettings();
 	}
 	
-	public void checkBoxSettings(){
-		if(check1.isSelected()){
-			check2.isIndeterminate();
-			check3.isIndeterminate();
-		}
-	}
-
 	@FXML
 	private void handleNew() throws IOException{
 		
@@ -181,12 +179,8 @@ public class ImageViewController implements Initializable {
             			imageRow++;
             		}
         		}
-        		
-        	
-        	
 			}
 		}
-		
 	}
 	
 	private ImageView createImageView(Image image) throws IOException {
@@ -222,14 +216,28 @@ public class ImageViewController implements Initializable {
 		                    MenuBar menuBar = new MenuBar();
 		                    Menu menu1 = new Menu("Edit");
 		                    Menu menu2 = new Menu("Brighten");
-		                    MenuItem menuItem = new MenuItem("Rotate");
-		                    MenuItem menuItem2 = new MenuItem("Increase");
-		                    MenuItem menuItem3= new MenuItem("Decrease");
-
-		                    menu1.getItems().add(menuItem);
-		                    menu2.getItems().addAll(menuItem2,menuItem3);
+		                    Menu menu3 = new Menu("Saturation");
+		                    Menu menu4 = new Menu("Contrast");
+		                    Menu menu5 = new Menu("Save");
 		                    
-		                    menuBar.getMenus().addAll(menu1,menu2);
+		                    MenuItem RotateImage = new MenuItem("Rotate");
+		                    MenuItem SaveImage = new MenuItem("Save Image");
+		                    
+		                    MenuItem menuItem2 = new MenuItem("Increase");
+		                    MenuItem menuItem3 = new MenuItem("Decrease");
+		                
+		                    MenuItem menuItem4 = new MenuItem("Increase");
+		                    MenuItem menuItem5 = new MenuItem("Decrease");
+		                    
+		                    MenuItem menuItem6 = new MenuItem("Increase");
+		                    MenuItem menuItem7 = new MenuItem("Decrease");
+		                    
+		                    menu1.getItems().addAll(RotateImage, SaveImage);
+		                    menu2.getItems().addAll(menuItem2,menuItem3);
+		                    menu3.getItems().addAll(menuItem4,menuItem5);
+		                    menu4.getItems().addAll(menuItem6,menuItem7);
+		                    
+		                    menuBar.getMenus().addAll(menu1,menu2,menu3,menu4);
 		                    
 		                    borderpane.setTop(menuBar);
 		            		imageView.setImage(image);
@@ -242,15 +250,33 @@ public class ImageViewController implements Initializable {
 		            		borderpane.setCenter(imageView);
 		            		borderpane.setStyle("-fx-background-color: BLACK");
 		            		
-		            		menuItem.setOnAction(new EventHandler<ActionEvent>(){
+		            		SaveImage.setOnAction(new EventHandler<ActionEvent>(){
+		            			@Override
+		            			public void handle(ActionEvent event){
+		            				//saveToFile(image);
+		            				 FileChooser fileChooser = new FileChooser();
+		            	                fileChooser.setTitle("Save Image");
+		            	                 
+		            	                File file = fileChooser.showSaveDialog(null);
+		            	                if (file != null) {
+		            	                    try {
+		            	                        ImageIO.write(SwingFXUtils.fromFXImage(imageView.getImage(),
+		            	                                null), "png", file);
+		            	                    } catch (IOException ex) {
+		            	                        Logger.getLogger(
+		            	                            ImageViewController.class.getName()).log(Level.SEVERE, null, ex);
+		            	                    }
+		            	                }
+		            			}
+		            		});
+		            		
+		            		RotateImage.setOnAction(new EventHandler<ActionEvent>(){
 		            			@Override
 		            			public void handle(ActionEvent event){
 		            				rotate += 90;
 		            				imageView.setRotate(rotate);
 		            			}
 		            		});
-		            		
-		            		
 		            		
 		            		menuItem2.setOnAction(new EventHandler<ActionEvent>(){
 		            			@Override
@@ -270,9 +296,42 @@ public class ImageViewController implements Initializable {
 		            			}
 		            		});
 		            		
-		            		/*
-		            		}*/
-		                    
+		            		menuItem4.setOnAction(new EventHandler<ActionEvent>(){
+		            			@Override
+		            			public void handle(ActionEvent event){
+				            			saturationValue += 0.1;
+				            			colorAdjust.setSaturation(saturationValue);
+				            			imageView.setEffect(colorAdjust);
+		            			}
+		            		});
+		            		
+		            		menuItem5.setOnAction(new EventHandler<ActionEvent>(){
+		            			@Override
+		            			public void handle(ActionEvent event){
+					            		saturationValue -= 0.1;
+				            			colorAdjust.setSaturation(saturationValue);
+				            			imageView.setEffect(colorAdjust);
+		            			}
+		            		});
+		            		
+		            		menuItem6.setOnAction(new EventHandler<ActionEvent>(){
+		            			@Override
+		            			public void handle(ActionEvent event){
+				            			contrastValue += 0.1;
+				            			colorAdjust.setContrast(contrastValue);
+				            			imageView.setEffect(colorAdjust);
+		            			}
+		            		});
+		            		
+		            		menuItem7.setOnAction(new EventHandler<ActionEvent>(){
+		            			@Override
+		            			public void handle(ActionEvent event){
+					            		contrastValue -= 0.1;
+				            			colorAdjust.setContrast(contrastValue);
+				            			imageView.setEffect(colorAdjust);
+		            			}
+		            		});
+			                    
 		                    Scene scene = new Scene(borderpane, 700, 600);
 		                    newStage.setScene(scene);
 		            		newStage.show();
@@ -287,8 +346,17 @@ public class ImageViewController implements Initializable {
 		return imageView;
 	}
 	
+	public static void saveToFile(Image image) {
+	    File outputFile = new File("C:/Users/dhurk/Documents/workspace/PictureGallery/src/application/images/");
+	    BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+	    try {
+	      ImageIO.write(bImage, "png", outputFile);
+	    } catch (IOException e) {
+	      throw new RuntimeException(e);
+	    }
+	}
+	
 	public void initScrollPane(){
-		
 		scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 	    scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		scroll.setContent(grid);
