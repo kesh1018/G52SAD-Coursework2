@@ -31,3 +31,6 @@ Gridpane (In ScrollPane) - Child,
 ImageView (In GridPane) - Child, 
 MenuBar (BorderPane top)
 
+Version 1.1
+- Added checkbox 
+- Feature to organize the images in a list or thumbnail added
