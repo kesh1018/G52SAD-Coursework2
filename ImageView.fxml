@@ -20,6 +20,13 @@
                     <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Close" />
                   </items>
                 </Menu>
+                  <Menu mnemonicParsing="false" text="View">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Thumbnail" />
+                        <MenuItem mnemonicParsing="false" text="List" />
+                        <MenuItem mnemonicParsing="false" text="Medium Icon" />
+                    </items>
+                  </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
                   <items>
                     <MenuItem mnemonicParsing="false" text="Delete" />
@@ -34,17 +41,19 @@
             </MenuBar>
          </top>
          <center>
-            <ScrollPane fx:id="scroll" fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
+            <ScrollPane fx:id="scroll" cache="true" cacheShape="false" fitToHeight="true" fitToWidth="true" prefHeight="359.0" prefWidth="406.0" BorderPane.alignment="CENTER">
                <content>
-                  <GridPane fx:id="grid" alignment="CENTER" hgap="50.0" vgap="50.0">
+                  <GridPane fx:id="grid" alignment="CENTER" cache="true" cacheShape="false" hgap="50.0" vgap="50.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <ImageView fx:id="imageView" fitHeight="109.0" fitWidth="201.0" pickOnBounds="true" preserveRatio="true" />
@@ -56,6 +65,15 @@
                </content>
             </ScrollPane>
          </center>
+         <bottom>
+            <ButtonBar prefHeight="40.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+               <buttons>
+                  <CheckBox fx:id="check1" minWidth="61.0" mnemonicParsing="false" prefHeight="21.0" text="List" />
+                  <CheckBox fx:id="check2" mnemonicParsing="false" text="Medium Icon" />
+                  <CheckBox fx:id="check3" mnemonicParsing="false" selected="true" text="Thumbnail" />
+               </buttons>
+            </ButtonBar>
+         </bottom>
       </BorderPane>
    </children>
 </AnchorPane>

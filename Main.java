@@ -24,7 +24,7 @@ public class Main extends Application {
             ImageViewController controller = loader.getController();
             controller.setPrevStage(primaryStage);
             
-            Scene scene = new Scene(imageOverview, 1200, 800);
+            Scene scene = new Scene(imageOverview, 600, 600);
             primaryStage.setScene(scene);
 				
 			primaryStage.show();

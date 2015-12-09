@@ -1,0 +1,33 @@
+License justification;
+
+The license used to develop this software is the GNU GENERAL PUBLIC LICENSE, 
+
+This license ensures that the developer has the freedome to share and change the software,
+
+And to ensure that the software is free to all of its users.
+
+Picture Gallery Version
+
+License
+- Appropriate license added.
+
+Initial Changes
+- ImageView.java is removed
+- Main.java added
+- FXML document is streamlined
+- FXML now works with Eclipse IDE
+
+Version 1.0
+- Added ability to search/upload images
+- Ability to show image in fullscreen
+- Added feature to close program
+- About page added
+- UI Design works as follows;
+From parent layout,
+Anchorpane - Parent,
+BorderPane - Child,
+ScrollPane (BorderPane Center) - Child,
+Gridpane (In ScrollPane) - Child,
+ImageView (In GridPane) - Child, 
+MenuBar (BorderPane top)
+
