@@ -16,11 +16,13 @@ public class Main extends Application {
         this.primaryStage.setTitle("Picture Gallery");
         
 		try {
-            
+            //Initialize stage
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("ImageView.fxml"));
             AnchorPane imageOverview = (AnchorPane) loader.load();
             
+            
+            //Connect to FXML
             ImageViewController controller = loader.getController();
             controller.setPrevStage(primaryStage);
             

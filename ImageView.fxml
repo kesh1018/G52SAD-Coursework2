@@ -20,13 +20,6 @@
                     <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Close" />
                   </items>
                 </Menu>
-                  <Menu mnemonicParsing="false" text="View">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Thumbnail" />
-                        <MenuItem mnemonicParsing="false" text="List" />
-                        <MenuItem mnemonicParsing="false" text="Medium Icon" />
-                    </items>
-                  </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
                   <items>
                     <MenuItem mnemonicParsing="false" text="Delete" />

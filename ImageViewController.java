@@ -48,7 +48,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class ImageViewController implements Initializable {
-
+	
+	//Intialize previous stage
 	Stage prevStage;
 
 	private int rotate;
@@ -77,10 +78,14 @@ public class ImageViewController implements Initializable {
 	@FXML
 	private CheckBox check3;
 	
+	
+	//Load scrollPane settings before program begins
 	public void initialize(URL url, ResourceBundle resource) {
 		initScrollPane();
 	}
 	
+	
+	//To open a new image
 	@FXML
 	private void handleNew() throws IOException{
 		
@@ -97,7 +102,7 @@ public class ImageViewController implements Initializable {
 		
 		fileChooser.getExtensionFilters().add(extFilter);
 		
-		// Show save file dialog
+		//Using list variable
 		List<File> list = fileChooser.showOpenMultipleDialog(null);
 		ObservableList<File> imageFiles = FXCollections.observableArrayList();
 		
@@ -109,14 +114,14 @@ public class ImageViewController implements Initializable {
         		ImageView imageView = new ImageView();
         		imageView = createImageView(image);
         		
-        		directoryField.setText(list.toString());
+        		//Vbox is used to display over GridPane
         		VBox vb = new VBox();
         		vb.getChildren().addAll(imageView);
         		
-        		
+        		//Is List checkbox is selected
         		if(check1.isSelected()){	
         	
-        			
+        			//Convert image into list
             		ListView<File> imageFilesList = new ListView<>(imageFiles);
             		imageFilesList.setCellFactory(listview -> new ListCell<File>(){
             			private final ImageView imageView = new ImageView();
@@ -126,7 +131,7 @@ public class ImageViewController implements Initializable {
                             imageView.setPreserveRatio(true);
                         }
                         
-                        
+                        //To obtain image path
                         @Override
                         public void updateItem(File file, boolean empty) {
                             super.updateItem(file, empty);
@@ -141,7 +146,8 @@ public class ImageViewController implements Initializable {
                         }
                        
                         });
-
+            		
+            		//Add settings onto grid
             		grid.add(vb, imageCol, imageRow);
             	
             	
@@ -154,6 +160,7 @@ public class ImageViewController implements Initializable {
             			
             		
         		}else{
+        			//Grid settings for Thumbnail sized 
         			 grid.setAlignment(Pos.CENTER);
         		     grid.setPadding(new Insets(150, 15, 15, 15));
 
@@ -173,7 +180,7 @@ public class ImageViewController implements Initializable {
         		    
         		     
         		 	imageCol++;
-                	
+                	//To ensure that the boundary is not over the defined window size
             		if(imageCol > 1){
             			imageCol = 0;
             			imageRow++;
@@ -183,12 +190,15 @@ public class ImageViewController implements Initializable {
 		}
 	}
 	
+	//Function to create Image and Click through
 	private ImageView createImageView(Image image) throws IOException {
 		// TODO Auto-generated method stub
 		ImageView imageView = null;
 		
 		
 		imageView = new ImageView(image);
+		
+		//If image is clicked
 		imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 		    @Override
@@ -199,17 +209,20 @@ public class ImageViewController implements Initializable {
 		            if(mouseEvent.getClickCount() == 1){
 		        	
 		            	try {
+		            		//New settings is shown
 		            		rotate = 0;
 		            		ColorAdjust colorAdjust = new ColorAdjust();
 		            		brightValue = 0;
+		            		saturationValue = 0;
+		            		contrastValue = 0;
 		            
-		            	
+		            		//New stage is created
 		            		Stage newStage = new Stage();
 		            		newStage.setTitle("Picture Gallery");
 		            		newStage.setWidth(prevStage.getWidth());
 		            		newStage.setHeight(prevStage.getHeight());
 		            		
-		                    
+		                    //BorderPane is made to show ImageView on it
 		                    BorderPane borderpane = new BorderPane();
 		                    ImageView imageView = new ImageView();
 		                    
@@ -218,8 +231,8 @@ public class ImageViewController implements Initializable {
 		                    Menu menu2 = new Menu("Brighten");
 		                    Menu menu3 = new Menu("Saturation");
 		                    Menu menu4 = new Menu("Contrast");
-		                    Menu menu5 = new Menu("Save");
-		                    
+		                 
+		                    //Initialize menu
 		                    MenuItem RotateImage = new MenuItem("Rotate");
 		                    MenuItem SaveImage = new MenuItem("Save Image");
 		                    
@@ -239,6 +252,8 @@ public class ImageViewController implements Initializable {
 		                    
 		                    menuBar.getMenus().addAll(menu1,menu2,menu3,menu4);
 		                    
+		                    //Settings for menu - show fullscreen
+		                    
 		                    borderpane.setTop(menuBar);
 		            		imageView.setImage(image);
 		            		imageView.setStyle("-fx-background-color: BLACK");
@@ -250,6 +265,7 @@ public class ImageViewController implements Initializable {
 		            		borderpane.setCenter(imageView);
 		            		borderpane.setStyle("-fx-background-color: BLACK");
 		            		
+		            		//Save Image function
 		            		SaveImage.setOnAction(new EventHandler<ActionEvent>(){
 		            			@Override
 		            			public void handle(ActionEvent event){
@@ -270,6 +286,7 @@ public class ImageViewController implements Initializable {
 		            			}
 		            		});
 		            		
+		            		//Rotate image function
 		            		RotateImage.setOnAction(new EventHandler<ActionEvent>(){
 		            			@Override
 		            			public void handle(ActionEvent event){
@@ -278,6 +295,7 @@ public class ImageViewController implements Initializable {
 		            			}
 		            		});
 		            		
+		            		//Increase brightness
 		            		menuItem2.setOnAction(new EventHandler<ActionEvent>(){
 		            			@Override
 		            			public void handle(ActionEvent event){
@@ -287,6 +305,7 @@ public class ImageViewController implements Initializable {
 		            			}
 		            		});
 		            		
+		            		//Reduce brightness
 		            		menuItem3.setOnAction(new EventHandler<ActionEvent>(){
 		            			@Override
 		            			public void handle(ActionEvent event){
@@ -296,6 +315,7 @@ public class ImageViewController implements Initializable {
 		            			}
 		            		});
 		            		
+		            		//Increase saturation
 		            		menuItem4.setOnAction(new EventHandler<ActionEvent>(){
 		            			@Override
 		            			public void handle(ActionEvent event){
@@ -305,6 +325,7 @@ public class ImageViewController implements Initializable {
 		            			}
 		            		});
 		            		
+		            		//Decrease saturation
 		            		menuItem5.setOnAction(new EventHandler<ActionEvent>(){
 		            			@Override
 		            			public void handle(ActionEvent event){
@@ -314,6 +335,7 @@ public class ImageViewController implements Initializable {
 		            			}
 		            		});
 		            		
+		            		//Increase contrast
 		            		menuItem6.setOnAction(new EventHandler<ActionEvent>(){
 		            			@Override
 		            			public void handle(ActionEvent event){
@@ -323,6 +345,8 @@ public class ImageViewController implements Initializable {
 		            			}
 		            		});
 		            		
+		            		
+		            		//Decrease contrast
 		            		menuItem7.setOnAction(new EventHandler<ActionEvent>(){
 		            			@Override
 		            			public void handle(ActionEvent event){
@@ -346,27 +370,21 @@ public class ImageViewController implements Initializable {
 		return imageView;
 	}
 	
-	public static void saveToFile(Image image) {
-	    File outputFile = new File("C:/Users/dhurk/Documents/workspace/PictureGallery/src/application/images/");
-	    BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
-	    try {
-	      ImageIO.write(bImage, "png", outputFile);
-	    } catch (IOException e) {
-	      throw new RuntimeException(e);
-	    }
-	}
-	
 	public void initScrollPane(){
 		scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 	    scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		scroll.setContent(grid);
 	}
-
+	
+	
+	//Exit function
 	@FXML
 	private void handleExit(){
 		System.exit(0);
 	}
 	
+	
+	//About software 
 	@FXML
     private void handleAbout() {
 

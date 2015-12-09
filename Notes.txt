@@ -46,3 +46,7 @@ Version 1.1.3
 - Added feature to increase/decrease saturation
 - Added feature to increase/decrease contrast
 - Added feature to save image (file format)
+
+Version 1.1.4
+- Comments added
+- Fixed Saturation filter bug
