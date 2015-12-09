@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,8 +21,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,20 +35,20 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class ImageViewController implements Initializable {
-	
-	int imageCol = 0;
-	int imageRow = 0;
+
 	Stage prevStage;
 
+	private int rotate;
+	private double brightValue;
+	private double contrastValue;
+	private double saturationValue;
 	
 	@FXML
 	private ScrollPane scroll  = new ScrollPane();
@@ -54,6 +59,8 @@ public class ImageViewController implements Initializable {
 	@FXML
 	private ImageView imageView;
 	
+	@FXML
+	private BorderPane borderpane;
 	
 	@FXML
 	private CheckBox check1;
@@ -78,6 +85,10 @@ public class ImageViewController implements Initializable {
 
 	@FXML
 	private void handleNew() throws IOException{
+		
+		int imageCol = 0;
+		int imageRow = 0;
+		
 		TextField directoryField = new TextField();
 		grid.getChildren().clear();
 		
@@ -100,18 +111,19 @@ public class ImageViewController implements Initializable {
         		ImageView imageView = new ImageView();
         		imageView = createImageView(image);
         		
-        		directoryField.setText(file.toString());
+        		directoryField.setText(list.toString());
         		VBox vb = new VBox();
         		vb.getChildren().addAll(imageView);
         		
+        		
         		if(check1.isSelected()){	
-        			HBox hl = new HBox(5, directoryField);
+        	
         			
             		ListView<File> imageFilesList = new ListView<>(imageFiles);
             		imageFilesList.setCellFactory(listview -> new ListCell<File>(){
             			private final ImageView imageView = new ImageView();
                         {
-                            imageView.setFitHeight(160);
+                            imageView.setFitHeight(0);
                             imageView.setFitWidth(80);
                             imageView.setPreserveRatio(true);
                         }
@@ -131,13 +143,10 @@ public class ImageViewController implements Initializable {
                         }
                        
                         });
-            		
-            		grid.setAlignment(Pos.TOP_LEFT);
-        			grid.setPadding(new Insets(15, 15, 15, 15));
 
             		grid.add(vb, imageCol, imageRow);
-            		grid.addRow(imageRow, hl);
-            		
+            	
+            	
             		imageCol++;
                 	
             		if(imageCol > 0){
@@ -146,34 +155,12 @@ public class ImageViewController implements Initializable {
             		}
             			
             		
-        		}else if(check2.isSelected()){  			
-        			grid.setAlignment(Pos.TOP_LEFT);
-        			grid.setPadding(new Insets(15, 15, 15, 15));
-
-        			grid.setHgap(80);
-        			grid.setVgap(20);
-       		     
-       		  
-        			ColumnConstraints columnConstraints = new ColumnConstraints();
-        			columnConstraints.setFillWidth(true);
-        			columnConstraints.setHgrow(Priority.ALWAYS);
-        			grid.getColumnConstraints().add(columnConstraints);
-        			
-        			//grid.add(vb, imageCol, imageRow);
-        			GridPane.setMargin(imageView, new Insets(50, 50, 50, 50));
-        			
-        			imageCol++;
-                	
-            		if(imageCol > 2){
-            			imageCol = 0;
-            			imageRow++;
-            		}
         		}else{
         			 grid.setAlignment(Pos.CENTER);
-        		     grid.setPadding(new Insets(15, 15, 15, 15));
+        		     grid.setPadding(new Insets(150, 15, 15, 15));
 
-        		     grid.setHgap(80);
-        		     grid.setVgap(40);
+        		     grid.setHgap(300);
+        		     grid.setVgap(300);
         		     
         		  
         		     ColumnConstraints columnConstraints = new ColumnConstraints();
@@ -181,15 +168,15 @@ public class ImageViewController implements Initializable {
         		     columnConstraints.setHgrow(Priority.ALWAYS);
         		     grid.getColumnConstraints().add(columnConstraints);
         		     
-        		     imageView.setFitHeight(200);
-        		     imageView.setFitWidth(300);
+        		     imageView.setFitHeight(250);
+        		     imageView.setFitWidth(250);
         		     
-        		     //grid.add(vb, imageCol, imageRow);
-        		     GridPane.setMargin(imageView, new Insets(50, 50, 50, 50));
+        		     grid.add(vb, imageCol, imageRow);
+        		    
         		     
         		 	imageCol++;
                 	
-            		if(imageCol > 2){
+            		if(imageCol > 1){
             			imageCol = 0;
             			imageRow++;
             		}
@@ -206,6 +193,7 @@ public class ImageViewController implements Initializable {
 		// TODO Auto-generated method stub
 		ImageView imageView = null;
 		
+		
 		imageView = new ImageView(image);
 		imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -215,28 +203,83 @@ public class ImageViewController implements Initializable {
 		        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
 
 		            if(mouseEvent.getClickCount() == 1){
-		                BorderPane borderPane = new BorderPane();
-						ImageView imageView = new ImageView();
-					
-						                               
-						imageView.setImage(image);
-						imageView.setStyle("-fx-background-color: BLACK");
-						imageView.setFitHeight(prevStage.getHeight() - 10);
-						imageView.setPreserveRatio(true);
-						imageView.setSmooth(false);
-					
-						imageView.setCache(true);
-						borderPane.setCenter(imageView);
-						borderPane.setStyle("-fx-background-color: BLACK");
-               
-						
-						Stage newStage = new Stage();
-						newStage.setWidth(prevStage.getWidth());
-						newStage.setHeight(prevStage.getHeight());
-           
-						Scene scene = new Scene(borderPane,Color.BLACK);
-						newStage.setScene(scene);
-						newStage.show();
+		        	
+		            	try {
+		            		rotate = 0;
+		            		ColorAdjust colorAdjust = new ColorAdjust();
+		            		brightValue = 0;
+		            
+		            	
+		            		Stage newStage = new Stage();
+		            		newStage.setTitle("Picture Gallery");
+		            		newStage.setWidth(prevStage.getWidth());
+		            		newStage.setHeight(prevStage.getHeight());
+		            		
+		                    
+		                    BorderPane borderpane = new BorderPane();
+		                    ImageView imageView = new ImageView();
+		                    
+		                    MenuBar menuBar = new MenuBar();
+		                    Menu menu1 = new Menu("Edit");
+		                    Menu menu2 = new Menu("Brighten");
+		                    MenuItem menuItem = new MenuItem("Rotate");
+		                    MenuItem menuItem2 = new MenuItem("Increase");
+		                    MenuItem menuItem3= new MenuItem("Decrease");
+
+		                    menu1.getItems().add(menuItem);
+		                    menu2.getItems().addAll(menuItem2,menuItem3);
+		                    
+		                    menuBar.getMenus().addAll(menu1,menu2);
+		                    
+		                    borderpane.setTop(menuBar);
+		            		imageView.setImage(image);
+		            		imageView.setStyle("-fx-background-color: BLACK");
+		            		imageView.setFitHeight(prevStage.getHeight() - 10);
+		            		imageView.setPreserveRatio(true);
+		            		imageView.setSmooth(false);
+		            	
+		            		imageView.setCache(true);
+		            		borderpane.setCenter(imageView);
+		            		borderpane.setStyle("-fx-background-color: BLACK");
+		            		
+		            		menuItem.setOnAction(new EventHandler<ActionEvent>(){
+		            			@Override
+		            			public void handle(ActionEvent event){
+		            				rotate += 90;
+		            				imageView.setRotate(rotate);
+		            			}
+		            		});
+		            		
+		            		
+		            		
+		            		menuItem2.setOnAction(new EventHandler<ActionEvent>(){
+		            			@Override
+		            			public void handle(ActionEvent event){
+				            			brightValue += 0.1;
+				            			colorAdjust.setBrightness(brightValue);
+				            			imageView.setEffect(colorAdjust);
+		            			}
+		            		});
+		            		
+		            		menuItem3.setOnAction(new EventHandler<ActionEvent>(){
+		            			@Override
+		            			public void handle(ActionEvent event){
+					            		brightValue -= 0.1;
+				            			colorAdjust.setBrightness(brightValue);
+				            			imageView.setEffect(colorAdjust);
+		            			}
+		            		});
+		            		
+		            		/*
+		            		}*/
+		                    
+		                    Scene scene = new Scene(borderpane, 700, 600);
+		                    newStage.setScene(scene);
+		            		newStage.show();
+							
+		        		} catch(Exception e) {
+		        			e.printStackTrace();
+		        		}
 		            }
 		        }
 		    }
@@ -246,7 +289,7 @@ public class ImageViewController implements Initializable {
 	
 	public void initScrollPane(){
 		
-		scroll.setHbarPolicy(ScrollBarPolicy.NEVER);
+		scroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 	    scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		scroll.setContent(grid);
 	}

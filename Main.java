@@ -13,7 +13,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Photo Album");
+        this.primaryStage.setTitle("Picture Gallery");
         
 		try {
             
@@ -24,7 +24,7 @@ public class Main extends Application {
             ImageViewController controller = loader.getController();
             controller.setPrevStage(primaryStage);
             
-            Scene scene = new Scene(imageOverview, 600, 600);
+            Scene scene = new Scene(imageOverview, 700, 600);
             primaryStage.setScene(scene);
 				
 			primaryStage.show();

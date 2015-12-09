@@ -34,3 +34,10 @@ MenuBar (BorderPane top)
 Version 1.1
 - Added checkbox 
 - Feature to organize the images in a list or thumbnail added
+
+Version 1.1.1
+- Updated Notes.txt
+
+Version 1.1.2
+- Added feature to rotate images
+- Added feature to increase/decrease brightness
